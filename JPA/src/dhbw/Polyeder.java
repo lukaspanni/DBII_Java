@@ -24,10 +24,17 @@ public class Polyeder {
 
     public double getPerimeter() {
         Set<Edge> edges = new HashSet<>();
-        for (Face f : faces) {
-            edges.addAll(f.edges);
-        }
+        faces.forEach(f -> edges.addAll(f.edges));
         return edges.stream().mapToDouble(Edge::getLength).sum();
+    }
+
+    public void move(double dx, double dy, double dz) {
+        Set<Point> points = new HashSet<>();
+        faces.forEach(f -> f.edges.forEach(e -> {
+            points.add(e.p1);
+            points.add(e.p1);
+        }));
+        points.forEach(p -> p.move(dx, dy, dz));
     }
 
     @Override

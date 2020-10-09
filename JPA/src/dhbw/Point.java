@@ -19,6 +19,12 @@ public class Point {
 
     @Override
     public String toString() {
-        return String.format("P(%d)", id);
+        return String.format("P(%d: %.0f, %.0f, %.0f)", id, x,y,z);
+    }
+
+    public void move(double dx, double dy, double dz) {
+        x += dx;
+        y += dy;
+        z += dz;
     }
 }
