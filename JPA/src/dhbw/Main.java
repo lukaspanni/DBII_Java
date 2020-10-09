@@ -1,4 +1,4 @@
-package dhbw.jpa;
+package dhbw;
 
 import java.util.List;
 
