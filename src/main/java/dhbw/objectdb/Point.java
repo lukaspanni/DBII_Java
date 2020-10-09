@@ -1,4 +1,4 @@
-package dhbw;
+package dhbw.objectdb;
 
 import java.io.Serializable;
 import javax.persistence.*;

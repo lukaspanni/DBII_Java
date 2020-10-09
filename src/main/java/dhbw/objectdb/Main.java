@@ -1,4 +1,4 @@
-package dhbw;
+package dhbw.objectdb;
 
 import javax.persistence.*;
 import java.util.*;
