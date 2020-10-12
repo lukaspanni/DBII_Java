@@ -1,6 +1,10 @@
 /dbii/.idea
-/JPD/.idea
+/JPA/.idea
 *.class
 JPA/out/*
 JPA/src/META-INF/persistence.xml
 *.odb
+Publication/src/META-INF/persistence.xml
+Publication/out/*
+/Publication/.idea
+*.iml
