@@ -31,7 +31,7 @@ public class Main
 			entityManager.getTransaction().begin();
 			entityManager.createQuery("DELETE FROM Book b").executeUpdate();
 			entityManager.createQuery("DELETE FROM BlogPost b").executeUpdate();
-			entityManager.createQuery("DELETE FROM Publication p").executeUpdate();
+			//entityManager.createQuery("DELETE FROM Publication p").executeUpdate();
 			entityManager.createQuery("DELETE FROM Author a").executeUpdate();
 			entityManager.getTransaction().commit();
 		} catch (Exception e) {
@@ -64,7 +64,7 @@ public class Main
 			b.numPages = 739;
 			b.isHardcover = true;
 			entityManager.persist(b);
-			author.publications.add(b);
+			//author.publications.add(b);
 			// Book 2
 			b = new Book();
 			b.author = author;
@@ -73,7 +73,7 @@ public class Main
 			b.numPages = 834;
 			b.isHardcover = true;
 			entityManager.persist(b);
-			author.publications.add(b);
+			//author.publications.add(b);
 			entityManager.getTransaction().commit();
 		} catch (Exception e) {
 			System.out.println("ERROR(createAuthor): " + e.getMessage());
@@ -91,7 +91,7 @@ public class Main
 			b.publishingDate = new Date();
 			b.url = "http://jedi.org/blog/1";
 			entityManager.persist(b);
-			author.publications.add(b);
+			//author.publications.add(b);
 			// BlogPost 2
 			b = new BlogPost();
 			b.author = author;
@@ -99,7 +99,7 @@ public class Main
 			b.publishingDate = new Date();
 			b.url = "http://jedi.org/blog/2";
 			entityManager.persist(b);
-			author.publications.add(b);
+			//author.publications.add(b);
 			entityManager.getTransaction().commit();
 		} catch (Exception e) {
 			System.out.println("ERROR(createAuthor): " + e.getMessage());

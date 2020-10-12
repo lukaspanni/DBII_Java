@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
-
+@Entity(name="Author")
 public class Author
 {
 	@Id
@@ -15,8 +15,8 @@ public class Author
 	
 	String name;
 
-	@OneToMany(mappedBy="author")
-	public List<Publication> publications = new ArrayList<Publication>(); 
+	//@OneToMany(mappedBy="author")
+	//public List<Publication> publications = new ArrayList<Publication>();
 
 	public Author() {
 	}
