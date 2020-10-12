@@ -4,7 +4,9 @@ import java.util.Date;
 
 import javax.persistence.*;
 
-
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="Publication_Type")
 public abstract class Publication
 {
 	@Id
