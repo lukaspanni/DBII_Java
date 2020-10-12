@@ -4,7 +4,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
-
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Publication
 {
 	@Id
