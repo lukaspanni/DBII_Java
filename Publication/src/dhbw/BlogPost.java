@@ -1,7 +1,9 @@
 
 package dhbw;
 
+import javax.persistence.Entity;
 
+@Entity(name="BlogPost")
 public class BlogPost extends Publication
 {
 	public String url;

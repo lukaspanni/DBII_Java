@@ -1,7 +1,9 @@
 
 package dhbw;
 
+import javax.persistence.Entity;
 
+@Entity(name="Book")
 public class Book extends Publication
 {
 	public boolean isHardcover;
