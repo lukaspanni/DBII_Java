@@ -1,5 +1,6 @@
 /dbii/.idea
 /JPA/.idea
+/vdbms_join/.idea
 *.class
 JPA/out/*
 JPA/src/META-INF/persistence.xml
