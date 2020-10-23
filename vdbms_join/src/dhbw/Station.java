@@ -59,10 +59,10 @@ public class Station {
     public void computeJoinNestedLoops(Station stR, Station stS) {
         for (Iterator<Data> it = stR.mData.getIterator(); it.hasNext(); ) {
             Data r = it.next();
-            //Transfer r from stR to stS
+            //Transfer r from stR to stResult
             mValuesTransferred += 3;
             List<Data> sData = stS.getByKey(r.C);
-            //Transfer sData from stS to stR
+            //Transfer sData from stS to stResult
             mValuesTransferred += sData.size() * 3;
             sData.forEach(s -> mData.addData(new DataResult(r, s)));
         }
