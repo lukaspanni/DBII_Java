@@ -88,6 +88,27 @@ public class Station {
 
     // StationResult
     public void computeJoinTransferOne(Station stR, Station stS) {
+        Iterator<Data> resultIt;
+        if (stR.mData.size() > stS.mData.size()) {
+            //Transfer stS -> stR
+            resultIt = stR.getJoinTransferOne(stS);
+        } else {
+            //Transfer stR -> stS
+            resultIt = stS.getJoinTransferOne(stR);
+        }
+        while (resultIt.hasNext()) {
+            this.mData.addData(resultIt.next());
+        }
+        mValuesTransferred += 5 * this.mData.size();
+    }
+
+
+    //StationR/StationS
+    private Iterator<Data> getJoinTransferOne(Station st) {
+        DataTable resultTable = new DataTable();
+        hashJoin(resultTable, st.mData.getIterator(), mData.getIterator());
+        mValuesTransferred += 3 * st.mData.size();
+        return resultTable.getIterator();
     }
 
 
