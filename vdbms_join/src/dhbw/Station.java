@@ -62,6 +62,8 @@ public class Station {
             //Transfer r from stR to stResult
             mValuesTransferred += 3;
             List<Data> sData = stS.getByKey(r.C);
+            //Transfer Key C from stResult to stS
+            mValuesTransferred += 1;
             //Transfer sData from stS to stResult
             mValuesTransferred += sData.size() * 3;
             sData.forEach(s -> mData.addData(new DataResult(r, s)));
