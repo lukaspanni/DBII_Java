@@ -117,6 +117,31 @@ public class Station {
 
     // StationResult
     public void computeJoinFilterOne(Station stR, Station stS) {
+        Iterator<Data> resultIt;
+        if (stR.mData.size() > stS.mData.size()) {
+            resultIt = stS.getJoinFilterOne(stR);
+        } else {
+            resultIt = stR.getJoinFilterOne(stS);
+        }
+        while (resultIt.hasNext()) {
+            mData.addData(resultIt.next());
+        }
+        mValuesTransferred += 5 * mData.size();
+
+    }
+
+    private Iterator<Data> getJoinFilterOne(Station st) {
+        Set<Integer> keys = mData.data().stream().map(data -> data.C).collect(Collectors.toSet());
+        mValuesTransferred += keys.size();
+        Iterator<Data> semiJoin = st.getByKeySet(keys);
+        DataTable resultTable = new DataTable();
+        hashJoin(resultTable, mData.getIterator(), semiJoin);
+        mValuesTransferred += 3 * resultTable.size();
+        return resultTable.getIterator();
+    }
+
+    private Iterator<Data> getByKeySet(Set<Integer> keys){
+        return mData.data().stream().filter(data -> keys.contains(data.C)).collect(Collectors.toList()).iterator();
     }
 
 
