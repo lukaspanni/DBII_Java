@@ -136,12 +136,13 @@ public class Station {
         Iterator<Data> semiJoin = st.getByKeySet(keys);
         DataTable resultTable = new DataTable();
         hashJoin(resultTable, mData.getIterator(), semiJoin);
-        mValuesTransferred += 3 * resultTable.size();
         return resultTable.getIterator();
     }
 
-    private Iterator<Data> getByKeySet(Set<Integer> keys){
-        return mData.data().stream().filter(data -> keys.contains(data.C)).collect(Collectors.toList()).iterator();
+    private Iterator<Data> getByKeySet(Set<Integer> keys) {
+        List<Data> result = mData.data().stream().filter(data -> keys.contains(data.C)).collect(Collectors.toList());
+        mValuesTransferred += 3*result.size();
+        return result.iterator();
     }
 
 
@@ -150,6 +151,42 @@ public class Station {
 
     // StationResult
     public void computeJoinHash(Station stR, Station stS) {
+        Iterator<Data> resultIt;
+        if (stR.mData.size() > stS.mData.size()) {
+            resultIt = stS.getJoinHash(stR);
+        } else {
+            resultIt = stR.getJoinHash(stS);
+        }
+        while (resultIt.hasNext()) {
+            mData.addData(resultIt.next());
+        }
+        mValuesTransferred += 5 * mData.size();
+    }
+
+    //StationR/StationS
+    private Iterator<Data> getJoinHash(Station st) {
+        //"HashMap"-Bit-Vector
+        long hashMap = 0;
+        for (Data data : mData.data()) {
+            hashMap |= getHashBit(data.C);
+        }
+        mValuesTransferred += 2;
+        Iterator<Data> semiJoin = st.getByHashMap(hashMap);
+        DataTable resultTable = new DataTable();
+        hashJoin(resultTable, semiJoin, mData.getIterator());
+        return resultTable.getIterator();
+    }
+
+    private long getHashBit(int key) {
+        //Example Hash-Function
+        return 1 << (key & 63);
+    }
+
+    //StationR/StationS
+    private Iterator<Data> getByHashMap(long hashMap) {
+        List<Data> result = mData.data().stream().filter(data -> (hashMap & getHashBit(data.C)) != 0).collect(Collectors.toList());
+        mValuesTransferred += 3*result.size();
+        return result.iterator();
     }
 }
 
