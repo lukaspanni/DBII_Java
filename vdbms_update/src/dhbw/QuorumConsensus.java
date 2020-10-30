@@ -2,79 +2,88 @@
 package dhbw;
 
 
-public class QuorumConsensus
-{
-	public static final int NROUNDS = 100000;
-	public static final int NSTATIONS = 4;
-	public static final int READ_QUORUM = 4;
-	public static final int WRITE_QUORUM = 4;
+import java.util.Arrays;
 
-	private Station[] mStations = new Station[NSTATIONS];
+public class QuorumConsensus {
+    public static final int NROUNDS = 100000;
+    public static final int NSTATIONS = 4;
+    public static final int READ_QUORUM = 4;
+    public static final int WRITE_QUORUM = 5;
 
-	public Station[] getStations() {
-		return mStations;
-	}
+    private Station[] mStations = new Station[NSTATIONS];
 
-	public Station getStation(int i) {
-		return mStations[i];
-	}
-	
-	
-	private void run() {
-		// create stations with given weight
-		mStations[0] = new Station(3);
-		mStations[1] = new Station(1);
-		mStations[2] = new Station(2);
-		mStations[3] = new Station(2);
-		
-		if (!checkQuorumConditions()) {
-			System.out.println("Quorum conditions not met");
-			return;
-		}
-		
-		doReadWrite();
-	}
+    public Station[] getStations() {
+        return mStations;
+    }
+
+    public Station getStation(int i) {
+        return mStations[i];
+    }
 
 
-	private boolean checkQuorumConditions() {
-		return true;
-	}
-	
-	
-	private void doReadWrite() {
-		Data d = new Data();
-		for (int i=0; i<NROUNDS; i++) {
-			d = read();
-			write(new Data(d.getValue()+1, d.getVersion()+1));
-		}
+    private void run() {
+        // create stations with given weight
+        mStations[0] = new Station(3);
+        mStations[1] = new Station(1);
+        mStations[2] = new Station(2);
+        mStations[3] = new Station(2);
 
-		// final value should be 1000 + NROUNDS - 1
-		if (d.getValue() == 1000 + NROUNDS - 1)
-			System.out.println("Final value OK");
-		else
-			System.out.println("Wrong final value " + d.getValue());
+        if (!checkQuorumConditions()) {
+            System.out.println("Quorum conditions not met");
+            return;
+        }
 
-		// final version should be NROUNDS
-		if (d.getVersion() == NROUNDS)
-			System.out.println("Final version OK");
-		else
-			System.out.println("Wrong final version " + d.getVersion());
-	}
-	
-	private Data read() {
-		Request rq = new Request(this);
-		return rq.read();
-	}
-	
-	private void write(Data d) {
-		Request wq = new Request(this);
-		wq.write(d);
-	}
+        doReadWrite();
+    }
 
-	
-	public static void main(String[] args) {
-		QuorumConsensus qc = new QuorumConsensus();
-		qc.run();
-	}
+
+    private boolean checkQuorumConditions() {
+        int totalWeight = Arrays.stream(mStations).mapToInt(Station::getWeight).sum();
+        return (WRITE_QUORUM + WRITE_QUORUM > totalWeight) && (READ_QUORUM + WRITE_QUORUM > totalWeight);
+    }
+
+
+    private void doReadWrite() {
+        Data d = new Data();
+        for (int i = 0; i < NROUNDS; i++) {
+            d = read();
+            write(new Data(d.getValue() + 1, d.getVersion() + 1));
+        }
+
+        // final value should be 1000 + NROUNDS - 1
+        if (d.getValue() == 1000 + NROUNDS - 1)
+            System.out.println("Final value OK");
+        else
+            System.out.println("Wrong final value " + d.getValue());
+
+        // final version should be NROUNDS
+        if (d.getVersion() == NROUNDS)
+            System.out.println("Final version OK");
+        else
+            System.out.println("Wrong final version " + d.getVersion());
+    }
+
+    private Data read() {
+        Request rq = new Request(this);
+        return rq.read();
+    }
+
+    private void write(Data d) {
+        Request wq = new Request(this);
+        wq.write(d);
+    }
+
+    public void printAll() {
+        for (Station s : mStations) {
+            System.out.println(s.getData().getValue() + " " +s.getData().getVersion());
+        }
+    }
+
+
+    public static void main(String[] args) {
+        QuorumConsensus qc = new QuorumConsensus();
+        qc.run();
+        qc.printAll();
+    }
 }
 

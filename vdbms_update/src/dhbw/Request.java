@@ -36,12 +36,24 @@ public class Request
 	// ASSUMPTION! either read or write is called once
 
 	public Data read() {
-		Station s = getNextStation();
-		return s.getData();
+		Data data = null;
+		int weight = 0;
+		do {
+			Station s = getNextStation();
+			if(data == null || data.getVersion() < s.getData().getVersion()){
+				data = s.getData();
+			}
+			weight += s.getWeight();
+		}while(weight < QuorumConsensus.READ_QUORUM);
+		return data;
 	}
 
 	public void write(Data d) {
-		for (Station s : mQC.getStations())
+		int weight = 0;
+		do{
+			Station s = getNextStation();
 			s.setData(d);
+			weight += s.getWeight();
+		}while(weight < QuorumConsensus.WRITE_QUORUM);
 	}
 }
