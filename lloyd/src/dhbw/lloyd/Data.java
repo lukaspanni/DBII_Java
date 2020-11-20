@@ -2,7 +2,7 @@ package dhbw.lloyd;
 
 public class Data
 {
-	public Point[] mData = {
+	public static Point[] mData = {
 		new Point( 3, 18),
 		new Point( 3, 20),
 		new Point( 4, 20),
