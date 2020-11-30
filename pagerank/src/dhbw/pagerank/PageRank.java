@@ -17,11 +17,11 @@ import org.eclipse.rdf4j.rio.Rio;
 public class PageRank {
     public static final String DIRNAME = "./pagerank_data/";
 
-    public static final String INPUTFILE = "example1.rdf";
-    public static final double ALPHA = 0;
+    //public static final String INPUTFILE = "example1.rdf";
+    //public static final double ALPHA = 0;
 
-    //public static final String INPUTFILE = "example2.rdf";
-    //public static final double ALPHA = 0.15;
+    public static final String INPUTFILE = "example2.rdf";
+    public static final double ALPHA = 0.15;
 
 
     public static void main(String args[]) {
@@ -69,6 +69,7 @@ public class PageRank {
             }
 
             // Apply ALPHA and dump
+            m.multScalar(1-ALPHA);
             m.dump();
             System.out.println();
 
@@ -80,6 +81,7 @@ public class PageRank {
             // Run some iterations
             for (i = 0; i < 10; i++) {
                 p = m.multVect(p);
+                p.addScalar(ALPHA / numPages);
                 p.dump();
             }
             System.out.println();
