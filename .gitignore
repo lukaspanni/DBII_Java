@@ -9,3 +9,9 @@ Publication/src/META-INF/persistence.xml
 Publication/out/*
 /Publication/.idea
 *.iml
+*.txt
+vdbms_update/.idea/*
+rdf/web-crawler/web-crawler-0001.rdf
+rdf/.idea/*
+mem_radix/.idea/*
+lloyd/.idea/*
