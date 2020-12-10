@@ -1,14 +1,15 @@
 package dhbw;
 
 
+import java.util.Arrays;
 import java.util.concurrent.CyclicBarrier;
 
 public class RadixPartition {
-    final static int N_MASK_BITS = 1;
+    final static int N_MASK_BITS = 2;
     final static int N_WORKER = (1 << N_MASK_BITS); // 2^n
-    final static int N_DATA = 6 * N_WORKER;    // must be multiple of N_WORKER
+    final static int N_DATA = 3 * N_WORKER;    // must be multiple of N_WORKER
 
-    final static int BITS_VALUE = 6;  // number of bits for our test data
+    final static int BITS_VALUE = 7;  // number of bits for our test data
     final static int MAX_VALUE = (1 << BITS_VALUE);
 
     int[] mInputData = new int[N_DATA];
@@ -23,6 +24,10 @@ public class RadixPartition {
         private int mIndex;
         private int[] mHistogram = new int[N_WORKER];
         private int[] mWriteIndex = new int[N_WORKER];
+
+        public int[] getHistogram() {
+            return mHistogram;
+        }
 
         Worker(int index) {
             mIndex = index;
@@ -104,17 +109,24 @@ public class RadixPartition {
     private class BarrierAction implements Runnable {
         @Override
         public void run() {
+            //dump histograms
+            for (int i = 0; i < N_WORKER; i++) {
+                int[] hist = mWorkers[i].getHistogram();
+                dumpArray("Histogram " + i, hist, N_WORKER);
+            }
             //get write indices
-            for(int i = 0; i < N_WORKER; i++){
+            for (int i = 0; i < N_WORKER; i++) {
                 mWorkers[0].mWriteIndex[i] = 0;
             }
-            for(int i = 1; i < N_WORKER; i++){
-                for(int j = 0; j < N_WORKER; j++){
-                    mWorkers[i].mWriteIndex[j] = mWorkers[i-1].mWriteIndex[j] + mWorkers[i-1].mHistogram[j];
+            dumpArray("Write-Index " + 0, mWorkers[0].mWriteIndex, N_WORKER);
+            for (int i = 1; i < N_WORKER; i++) {
+                for (int j = 0; j < N_WORKER; j++) {
+                    mWorkers[i].mWriteIndex[j] = mWorkers[i - 1].mWriteIndex[j] + mWorkers[i - 1].mHistogram[j];
                 }
+                dumpArray("Write-Index " + i, mWorkers[i].mWriteIndex, N_WORKER);
             }
-            for(int i = 0; i < N_WORKER; i++){
-                mOutputDataSize[i] = mWorkers[N_WORKER-1].mWriteIndex[i] + mWorkers[N_WORKER-1].mHistogram[i];
+            for (int i = 0; i < N_WORKER; i++) {
+                mOutputDataSize[i] = mWorkers[N_WORKER - 1].mWriteIndex[i] + mWorkers[N_WORKER - 1].mHistogram[i];
             }
         }
     }
